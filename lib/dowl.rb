@@ -9,7 +9,7 @@ require 'dowl/property'
 require 'dowl/ontology'
 require 'dowl/generator'
 
-require 'ftools'
+require 'fileutils'
 
 module DOWL
       
