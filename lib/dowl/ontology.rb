@@ -38,6 +38,11 @@ module DOWL
     def title()
       return get_literal(DOWL::Namespaces::DCTERMS.title)
     end
+
+    def label()
+      return get_literal(DOWL::Namespaces::RDFS.label)
+    end
+
     
     def comment()
       return get_literal(DOWL::Namespaces::RDFS.comment)
