@@ -22,17 +22,18 @@ module DOWL
     end
         
     def sub_property_of()
-      parent = @schema.model.first_value(
-        RDF::Query::Pattern.new( @resource, DOWL::Namespaces::RDFS.subPropertyOf) )
-      if parent
-        uri = parent.to_s
+      parents = []
+
+      @schema.model.query(
+        RDF::Query::Pattern.new( @resource, DOWL::Namespaces::RDFS.subPropertyOf) ) do |statement|
+        uri = statement.object.to_s
         if @schema.properties[uri]
-          return @schema.properties[uri]
+          parents << @schema.properties[uri]
         else
-          return uri
+          parents << uri
         end
       end
-      return nil
+      return parents
     end
         
     def range()

@@ -78,13 +78,20 @@
 		   				<tr><td>Label</td><td><%= t[1].label %> </ts></tr>
 		   				<tr><td>URI</td><td><code><%= t[1].uri %></code></ts></tr>
 		   				<tr><td>Status</td><td><%= t[1].status %> </ts></tr>
-		   				<% if t[1].sub_class_of %>
-		   					<% if t[1].sub_class_of.class.to_s == "String" %>	   				
-		   						<tr><td>Has Parent Class</td><td><a href="<%= t[1].sub_class_of %>"><%= t[1].sub_class_of %></a></td></tr>
+		   				<% if t[1].sub_class_of.length > 0 %>
+                                                <tr>
+						  <td>Parent Classes</td>
+						  <td>
+		   				    <% for parent_class in t[1].sub_class_of %>
+		   					<% if parent_class.class.to_s == "String" %>
+							  <a href="<%= parent_class %>"><%= parent_class %></a>
 		   					<% else %>
-		   						<tr><td>Has Parent Class</td><td><a href="#class_<%= t[1].sub_class_of.short_name %>"><%= t[1].sub_class_of.short_name %></a></td></tr>
+							  <a href="#class_<%= parent_class.short_name %>"><%= parent_class.short_name %></a>
 		   					<% end %>
-		   				<% end %>
+		   				    <% end %>
+						    </td>
+						  </tr>
+						<% end %>
 		   				<% if t[1].sub_classes.length > 0 %>
 							<tr>
 								<td>Sub-Classes</td>
@@ -138,19 +145,26 @@
 			   					<tr><td>Label</td><td><%= t[1].label %> </ts></tr>
 			   					<tr><td>URI</td><td><code><%= t[1].uri %></code></ts></tr>	   					
 				   				<tr><td>Status</td><td><%= t[1].status %> </ts></tr>
-				   				<% if t[1].sub_property_of %>
-				   					<% if t[1].sub_property_of.class.to_s == "String" %>	   				
-				   						<tr><td>Has Parent Property</td><td><a href="<%= t[1].sub_property_of %>"><%= t[1].sub_property_of %></a></td></tr>
-				   					<% else %>
-				   						<tr><td>Has Parent Property</td><td><a href="#prop_<%= t[1].sub_property_of.short_name %>"><%= t[1].sub_property_of.short_name %></a></td></tr>
-				   					<% end %>
-				   				<% end %>
+                                                                <% if t[1].sub_property_of.length > 0 %>
+                                                                <tr>
+								  <td>Parent Properties</td>
+								  <td>
+				   				    <% for parent_prop in t[1].sub_property_of %>
+				   				      <% if parent_prop.class.to_s == "String" %>	   				
+				   						<a href="<%= parent_prop %>"><%= parent_prop %></a>
+				   				      <% else %>
+				   						<a href="#prop_<%= parent_prop.short_name %>"><%= parent_prop.short_name %></a>
+				   				      <% end %>
+				   				    <% end %>
+								  </td>
+								</tr>
+								<% end %>
 				   				<% if t[1].sub_properties.length > 0 %>
 									<tr>
 										<td>Sub-Properties</td>
 										<td>
 											<% t[1].sub_properties.each do |child| %>
-												<a href="#class_<%= child.short_name %>"><%= child.short_name %></a>
+												<a href="#prop_<%= child.short_name %>"><%= child.short_name %></a>
 											<% end %>
 										</td>
 									</tr>
@@ -222,19 +236,26 @@
 							<tr><td>Label</td><td><%= t[1].label %> </ts></tr>
 		   					<tr><td>URI</td><td><code><%= t[1].uri %></code></ts></tr>							   				
 			   				<tr><td>Status</td><td><%= t[1].status %> </ts></tr>
-			   				<% if t[1].sub_property_of %>
-			   					<% if t[1].sub_property_of.class.to_s == "String" %>	   				
-			   						<tr><td>Has Parent Property</td><td><a href="<%= t[1].sub_property_of %>"><%= t[1].sub_property_of %></a></td></tr>
-			   					<% else %>
-			   						<tr><td>Has Parent Property</td><td><a href="#prop_<%= t[1].sub_property_of.short_name %>"><%= t[1].sub_property_of.short_name %></a></td></tr>
-			   					<% end %>
-			   				<% end %>
+                                                        <% if t[1].sub_property_of.length > 0 %>
+                                                        <tr>
+							  <td>Parent Properties</td>
+							  <td>
+				   			    <% for parent_prop in t[1].sub_property_of %>
+				   			      <% if parent_prop.class.to_s == "String" %>	   				
+				   			        <a href="<%= parent_prop %>"><%= parent_prop %></a>
+				   		              <% else %>
+				   			        <a href="#prop_<%= parent_prop.short_name %>"><%= parent_prop.short_name %></a>
+				   			      <% end %>
+				   			    <% end %>
+							  </td>
+							</tr>
+							<% end %>
 			   				<% if t[1].sub_properties.length > 0 %>
 								<tr>
 									<td>Sub-Properties</td>
 									<td>
 										<% t[1].sub_properties.each do |child| %>
-											<a href="#class_<%= child.short_name %>"><%= child.short_name %></a>
+											<a href="#prop_<%= child.short_name %>"><%= child.short_name %></a>
 										<% end %>
 									</td>
 								</tr>

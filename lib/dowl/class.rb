@@ -14,17 +14,18 @@ module DOWL
     end
     
     def sub_class_of()
-      parent = @schema.model.first_value( 
-        RDF::Query::Pattern.new( @resource, DOWL::Namespaces::RDFS.subClassOf ) )
-      if parent
-        uri = parent.to_s
+      parents = []
+
+      @schema.model.query( 
+        RDF::Query::Pattern.new( @resource, DOWL::Namespaces::RDFS.subClassOf ) ) do |statement|
+        uri = statement.object.to_s
         if @schema.classes[uri]
-          return @schema.classes[uri]
+          parents << @schema.classes[uri]
         else
-          return uri
+          parents << uri
         end
       end
-      return nil
+      return parents
     end
    
     def see_alsos()
