@@ -9,8 +9,6 @@ require 'dowl/property'
 require 'dowl/ontology'
 require 'dowl/generator'
 
-require 'fileutils'
-
 module DOWL
       
   class Namespaces
