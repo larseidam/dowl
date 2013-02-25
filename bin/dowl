@@ -13,5 +13,9 @@ if ARGV[1]
 else
   generator = DOWL::Generator.new( schema )
 end
+if ARGV[2]
+  schema.language=(ARGV[2])
+end
+
 file = generator.run()
 puts file

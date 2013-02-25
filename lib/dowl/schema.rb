@@ -8,6 +8,7 @@ module DOWL
     attr_reader :datatype_properties
     attr_reader :object_properties
     attr_reader :classes
+    attr_accessor :language
     
     def initialize(model, introduction=nil)
         @model = model

@@ -9,7 +9,18 @@ module DOWL
     end  
     
     def get_literal(property)
-      return @schema.model.first_value(RDF::Query::Pattern.new( @resource, property ) )
+      if schema.language.nil?
+         @schema.model.first_value(RDF::Query::Pattern.new( @resource, property ) )
+      else
+        @schema.model.query(
+          RDF::Query::Pattern.new( @resource, property, nil ) ) do |statement|
+          if statement.object.is_a?(RDF::Literal) and
+             statement.object.language == schema.language.to_sym
+            return statement.object.value
+          end
+        end
+        return ""
+      end
     end
     
   end
