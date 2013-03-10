@@ -1,3 +1,28 @@
+<%
+   # This is not the best place for some logic, but since this
+   # method is very usecase specific it was the easiest and quickest
+   # way..
+   def shorten(uri)
+     prefixes = {}
+     prefixes['http://www.w3.org/2001/XMLSchema#'] = "xmls"
+     prefixes['http://purl.org/goodrelations/v1#'] = "gr"
+     prefixes['http://www.serviceOntology.org/'] = "seo"
+     prefixes['http://schema.org/'] = "schema"
+     prefixes['http://xmlns.com/foaf/0.1/'] = "foaf"
+     prefixes['http://dbpedia.org/resource/'] = "dbpedia"
+     prefixes['http://purl.bioontology.org/ontology/SNOMEDCT/'] = "snomedct"
+     prefixes['http://purl.bioontology.org/ontology/MSH/'] = "mesh"
+     prefixes['http://purl.bioontology.org/ontology/MEDLINEPLUS/'] = "medline"
+     prefixes['http://www.orphanet.org/rdfns#'] = "orpha"
+   
+     prefixes.each do |key,val|
+       if uri[0,key.length] == key
+         return uri.dup.gsub(key, val+":")
+       end
+     end
+     uri
+   end
+   %>
 <html>
   <head>
     <meta charset="UTF-8">
@@ -45,7 +70,7 @@
 		<%= introduction %>
 		<% end %>
 		<div style="margin-top:20px"></div>
-			<h1 id="classes">Classes</h1>
+			<h2 id="classes">Classes</h2>
 
 	   		<%schema.list_classes().sort.each do |t| %>
 			    <% super_classes = [t[1]] %>
@@ -57,18 +82,18 @@
 			    <% end %>
 			    <% super_classes = super_classes.reverse() %>
 	   			<div class="term" id="class_<%= t[1].short_name %>">	   					   			
-	   				<h2>
+	   				<h3>
 					  <% super_classes[0..-2].each do |sc| %><% if sc.class.to_s != "String" %>
 					    <a href="#class_<%= sc.short_name %>"><%= sc.short_name.split("/")[-1] %></a> > 
 					  <% end %><% end %>
 					  <abbr title="<%= t[1].uri %>"><%= t[1].short_name.split("/")[-1] %></abbr>
-					</h2>
+					</h3>
 					<% if t[1].sub_class_of.find{|sco| sco.class.to_s == "String"} %>
 					<strong>external super classes:</strong>
 					  <ul>
 					  <% t[1].sub_class_of.each do |sc| %>
 					    <% if sc.class.to_s == "String" %>
-					      <li><a href="<%= sc %>"><%= sc %></a></li>
+					      <li><a href="<%= sc %>"><%= shorten(sc) %></a></li>
 					    <% end %>
 					  <% end %>
 					  </ul>
@@ -99,7 +124,7 @@
 								<th><abbr title="<%= p[1].uri %>"><%= p[1].short_name.split("/")[-1] %></abbr></th>
 								<td>
 								  <% p[1].range.each() do |r| %>
-								    <% if r.class.to_s == "String" %><a target="_blank" href="<%= r %>"><%= r %></a><% else %><a href="#class_<%= r.short_name %>"><%= r.short_name.split("/")[-1] %></a><% end %>
+								    <% if r.class.to_s == "String" %><a target="_blank" href="<%= r %>"><%= shorten(r) %></a><% else %><a href="#class_<%= r.short_name %>"><%= r.short_name.split("/")[-1] %></a><% end %>
 								  <% end %>
 								</td>
 								<td><%= p[1].comment %></td>
@@ -149,7 +174,7 @@
 	   			<hr>
 	  		<%end%>
 
-			<h1 id="gen_props">Generic properies</h1>
+			<h2 id="gen_props">Generic properies</h2>
 			<table>
 			<thead>
 			  <tr>
