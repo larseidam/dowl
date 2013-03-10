@@ -73,14 +73,17 @@
 			<h2 id="classes">Classes</h2>
 
 	   		<%schema.list_classes().sort.each do |t| %>
-			    <% super_classes = [t[1]] %>
-			    <% current_class = t[1] %>
-			    <%# TODO allow non taxonomic structures %>
-			    <% while current_class.class.to_s != "String" and current_class.sub_class_of.length > 0 %>
-			      <% super_classes << current_class.sub_class_of[0] %>
-  			      <% current_class = current_class.sub_class_of[0] %>
-			    <% end %>
-			    <% super_classes = super_classes.reverse() %>
+			    <% super_classes = []
+			       queue = [t[1]]
+			       until queue.empty?
+			         if queue[0].class.to_s != "String"
+			           queue.concat(queue[0].sub_class_of)
+			           super_classes << queue.shift
+				 else queue.shift
+				 end
+		               end
+   			       super_classes = super_classes.reverse()
+			    %>
 	   			<div class="term" id="class_<%= t[1].short_name %>">	   					   			
 	   				<h3>
 					  <% super_classes[0..-2].each do |sc| %><% if sc.class.to_s != "String" %>
