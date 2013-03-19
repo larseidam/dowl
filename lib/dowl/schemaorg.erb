@@ -190,7 +190,7 @@
 			<% schema.list_properties().sort.each do |p| %>
   			  <% if p[1].domain.empty? and p[1].sub_property_of.empty? %>
 			  <tr>
-			    <td><abbr title="<%= p[1].uri %>"><%= p[1].short_name.split("/")[-1] %></abbr></td>
+			    <th><abbr title="<%= p[1].uri %>"><%= p[1].short_name.split("/")[-1] %></abbr></th>
 			    <td>
 			      <% p[1].range.each() do |r| %>
  			        <% if r.class.to_s == "String" %><%= r %><% else %><a href="#class_<%= r.short_name %>"><%= r.short_name.split("/")[-1] %></a><% end %> 
@@ -198,10 +198,32 @@
 			    </td>
 			    <td><%= p[1].comment %></td>
 			  </tr>
+
+			  <% p[1].sub_properties().each() do |sp| %>
+			    <% if sp.domain.empty? %>
+			      <tr>
+				<th><abbr title="<%= sp.uri %>"><%= sp.short_name.split("/")[-1] %></abbr></th>
+				<td>
+				  <% if sp.range.empty? %>
+				    <%# range of subproperty is empty so we take the parents range %>
+				    <% p[1].range.each() do |r| %>
+				      <% if r.class.to_s == "String" %><a target="_blank" href="<%= r %>"><%= r %></a> <% else %><a href="#class_<%= r.short_name %>"><%= r.short_name.split("/")[-1] %></a> <% end %>
+				    <% end %>
+				  <% else %>
+				    <%# if the range of the subproperty is given we simply take that one %>
+				    <% sp.range.each() do |r| %>
+				      <% if r.class.to_s == "String" %><a target="_blank" href="<%= r %>"><%= r %></a><% else %><a href="#class_<%= r.short_name %>"><%= r.short_name.split("/")[-1] %></a> <% end %></td>
+				    <% end %>
+				  <% end %>
+				</td>
+				<td><%= sp.comment %></td>
+ 			      </tr>
+			    <% end %>
+			  <% end %>
 			  <% end %>
 			<% end %>
 			</tbody>
-			</table>
+		      </table>
 		</div>
 				
 		</div>
